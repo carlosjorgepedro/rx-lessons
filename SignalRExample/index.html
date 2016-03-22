@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <div id="received"></div>
+</body>
+
+
+</html>
+<script src="Scripts/jquery-1.10.2.js"></script>
+<script src="Scripts/jquery.signalR-2.1.2.js"></script>
+<script src="signalr/hubs"></script>
+<script src="Scripts/rx.all.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+        var chatServer = $.connection.dataHub;
+
+        var source = Rx.Observable.fromEvent(chatServer, "sendData");
+        
+        source.subscribe(function(data) {
+            var div = document.getElementById("received");
+            var anchor = document.createElement("a");
+            anchor.innerText = data;
+            div.appendChild(anchor);
+        });
+
+        
+
+        $.connection.hub.start().done(function() {
+            chatServer.server.request();
+        });
+
+
+    });
+
+
+
+</script>
